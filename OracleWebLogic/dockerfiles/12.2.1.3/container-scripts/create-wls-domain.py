@@ -12,7 +12,7 @@
 domain_name  = os.environ.get("DOMAIN_NAME", "base_domain")
 admin_name  = os.environ.get("ADMIN_NAME", "AdminServer")
 admin_listen_port   = int(os.environ.get("ADMIN_LISTEN_PORT", "7001"))
-domain_path  = '/u01/oracle/user_projects/domains/%s' % domain_name
+domain_path  = 'C:/u01/oracle/user_projects/domains/%s' % domain_name
 production_mode = os.environ.get("PRODUCTION_MODE", "prod")
 administration_port_enabled = os.environ.get("ADMINISTRATION_PORT_ENABLED", "true")
 administration_port = int(os.environ.get("ADMINISTRATION_PORT", "9002"))
@@ -27,12 +27,12 @@ print('administration_port         : [%s]' % administration_port);
 
 # Open default domain template
 # ============================
-readTemplate("/u01/oracle/wlserver/common/templates/wls/wls.jar")
+readTemplate("C:/u01/oracle/wlserver/common/templates/wls/wls.jar")
 
 set('Name', domain_name)
 setOption('DomainName', domain_name)
 
-# Set Administration Port 
+# Set Administration Port
 # =======================
 if administration_port_enabled != "false":
    set('AdministrationPort', administration_port)
@@ -75,7 +75,7 @@ setOption('ServerStartMode',production_mode)
 #set('SecureListener', 'false')
 #set('LogLevel', 'FINEST')
 
-# Set the Node Manager user name and password 
+# Set the Node Manager user name and password
 # ===========================================
 #cd('/SecurityConfiguration/%s' % domain_name)
 #set('NodeManagerUsername', username)
