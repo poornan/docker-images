@@ -56,8 +56,8 @@ if administration_port_enabled != "false":
 # Define the user password for weblogic
 # =====================================
 cd(('/Security/%s/User/weblogic') % domain_name)
-cmo.setName(username)
-cmo.setPassword(password)
+cmo.setName(usrname)
+cmo.setPassword(pswd)
 
 # Write the domain and close the domain template
 # ==============================================

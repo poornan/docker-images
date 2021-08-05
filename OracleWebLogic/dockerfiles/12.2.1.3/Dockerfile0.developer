@@ -28,7 +28,7 @@
 # Extend base JRE image
 # You must build the image by using the Dockerfile in GitHub project `../../../OracleJava/java8`
 # ----------------------------------------------------------------------------------------------
-FROM dockeronwindows/ser-java0:ananth
+FROM dockeronwindows/ser-java0:ananth as builder
 USER ContainerAdministrator
 # Labels
 # ------
@@ -68,7 +68,7 @@ RUN cd C:\u01 && %JAVA_HOME%\bin\jar xf C:\u01\%FMW_PKG% && cd \ && `
 #    RD /S /Q C:\u01\oracle\cfgtoollogs
 
 # Final image stage
-# FROM dockeronwindows/ser-java0:ananth
+FROM dockeronwindows/ser-java0:ananth
 
 ENV ORACLE_HOME=C:\u01\oracle `
     SCRIPT_FILE=C:\u01\oracle\createAndStartEmptyDomain.bat `
@@ -82,22 +82,22 @@ ENV DOMAIN_NAME="${DOMAIN_NAME:-base_domain}" `
     ADMIN_NAME="${ADMIN_NAME:-AdminServer}" `
     DEBUG_FLAG=true `
     PRODUCTION_MODE=dev `
-    ADMINISTRATION_PORT_ENABLED="${ADMINISTRATION_PORT_ENABLED:-true}" `
+    ADMINISTRATION_PORT_ENABLED="${ADMINISTRATION_PORT_ENABLED:-false}" `
     ADMINISTRATION_PORT="${ADMINISTRATION_PORT:-9002}"
 
 # Setup filesystem and oracle user
 # Adjust file permissions, go to \u01 as user 'oracle' to proceed with WLS installation
 # ------------------------------------------------------------
-# RUN mkdir  C:\u01\oracle
+RUN mkdir  C:\u01\oracle
 
-# COPY --from=builder C:\u01 C:\u01
+COPY --from=builder C:\u01 C:\u01
 
 # Copy scripts
 #-------------
 COPY container-scripts\createAndStartEmptyDomain.bat container-scripts\create-wls-domain.py container-scripts\get_healthcheck_url.bat C:\u01\oracle\
 
 # HEALTHCHECK --start-period=10s --timeout=30s --retries=3  CMD curl -k -s --fail "C:\u01\oracle\get_healthcheck_url.bat" || exit 1
-# WORKDIR C:\u01\oracle
+WORKDIR C:\u01\oracle
 
 # Define default command to start script.
 CMD "C:\u01\oracle\createAndStartEmptyDomain.bat"
